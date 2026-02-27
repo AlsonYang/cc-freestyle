@@ -62,7 +62,7 @@ export function TaskForm({ open, onOpenChange, task }: TaskFormProps) {
       status: 'todo',
       priority: 'medium',
       due_date: '',
-      category_id: '',
+      category_id: 'none',
     },
   })
 
@@ -75,7 +75,7 @@ export function TaskForm({ open, onOpenChange, task }: TaskFormProps) {
         status: task.status,
         priority: task.priority,
         due_date: task.due_date ? task.due_date.split('T')[0] : '',
-        category_id: task.category_id ? String(task.category_id) : '',
+        category_id: task.category_id ? String(task.category_id) : 'none',
       })
     } else {
       reset({
@@ -84,7 +84,7 @@ export function TaskForm({ open, onOpenChange, task }: TaskFormProps) {
         status: 'todo',
         priority: 'medium',
         due_date: '',
-        category_id: '',
+        category_id: 'none',
       })
     }
   }, [task, open, reset])
@@ -96,7 +96,7 @@ export function TaskForm({ open, onOpenChange, task }: TaskFormProps) {
       status: data.status,
       priority: data.priority,
       due_date: data.due_date || null,
-      category_id: data.category_id ? Number(data.category_id) : null,
+      category_id: data.category_id && data.category_id !== 'none' ? Number(data.category_id) : null,
     }
 
     try {
@@ -230,14 +230,14 @@ export function TaskForm({ open, onOpenChange, task }: TaskFormProps) {
                 control={control}
                 render={({ field }) => (
                   <Select
-                    value={field.value ?? ''}
+                    value={field.value ?? 'none'}
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="None" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">None</SelectItem>
+                      <SelectItem value="none">None</SelectItem>
                       {categories?.map((cat) => (
                         <SelectItem key={cat.id} value={String(cat.id)}>
                           <span className="flex items-center gap-2">
