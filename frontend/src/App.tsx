@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Plus, Zap } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Plus, Zap, Sun, Moon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { StatsBar } from '@/components/StatsBar'
@@ -13,6 +13,16 @@ export default function App() {
   const [filters, setFilters] = useState<Filters>({})
   const [formOpen, setFormOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<Task | null>(null)
+  const [theme, setTheme] = useState<'dark' | 'light'>(
+    () => (localStorage.getItem('theme') as 'dark' | 'light') ?? 'dark'
+  )
+
+  useEffect(() => {
+    const root = document.documentElement
+    root.classList.remove('dark', 'light')
+    root.classList.add(theme)
+    localStorage.setItem('theme', theme)
+  }, [theme])
 
   const handleOpenCreate = () => {
     setEditingTask(null)
@@ -43,10 +53,20 @@ export default function App() {
             <span className="font-bold text-lg tracking-tight">TaskFlow</span>
           </div>
 
-          <Button onClick={handleOpenCreate} size="sm" className="gap-1.5">
-            <Plus className="h-4 w-4" />
-            New Task
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
+            <Button onClick={handleOpenCreate} size="sm" className="gap-1.5">
+              <Plus className="h-4 w-4" />
+              New Task
+            </Button>
+          </div>
         </div>
       </header>
 
