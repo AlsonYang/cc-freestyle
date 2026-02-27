@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Plus, Zap, Sun, Moon } from 'lucide-react'
+import { useState } from 'react'
+import { Plus, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { StatsBar } from '@/components/StatsBar'
@@ -7,22 +7,13 @@ import { TaskList } from '@/components/TaskList'
 import { TaskFilters } from '@/components/TaskFilters'
 import { TaskForm } from '@/components/TaskForm'
 import { CategoryManager } from '@/components/CategoryManager'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import type { Task, TaskFilters as Filters } from '@/types'
 
 export default function App() {
   const [filters, setFilters] = useState<Filters>({})
   const [formOpen, setFormOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<Task | null>(null)
-  const [theme, setTheme] = useState<'dark' | 'light'>(
-    () => (localStorage.getItem('theme') as 'dark' | 'light') ?? 'dark'
-  )
-
-  useEffect(() => {
-    const root = document.documentElement
-    root.classList.remove('dark', 'light')
-    root.classList.add(theme)
-    localStorage.setItem('theme', theme)
-  }, [theme])
 
   const handleOpenCreate = () => {
     setEditingTask(null)
@@ -54,14 +45,7 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
+            <ThemeToggle />
             <Button onClick={handleOpenCreate} size="sm" className="gap-1.5">
               <Plus className="h-4 w-4" />
               New Task
